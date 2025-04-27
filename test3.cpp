@@ -82,7 +82,7 @@ int main(int argc, char* argv[]) {
         result += data.partial_sum;
     }
 
-    printf("s=%.2f t=%lld(ms)\n", result, elapsed_ms);
+    printf("s=%.2f t=%.6f(ms)\n", result, elapsed_ms);
 
     return 0;
 }
