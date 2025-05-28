@@ -21,7 +21,7 @@ public:
 
     // 打印当前位示图状态，每32位一行
     void printBitmap() {
-        cout << "\n当前位示图状态（1=占用，0=空闲）:" << endl;
+        cout << "\nCurrent bitmap status (1=used, 0=free):" << endl;
         for (int i = 0; i < total_blocks; ++i) {
             if (i % 32 == 0)
                 cout << "Bit[" << i / 32 << "]: ";
@@ -58,18 +58,18 @@ public:
 
         if ((int)allocated.size() < num_blocks) {
             // 空间不足，回滚之前分配的块
-            cout << "空间不足，回滚已分配的块" << endl;
+            cout << "Not enough space, rolling back allocated blocks." << endl;
             for (auto& addr : allocated) {
                 int idx = addressToIndex(get<0>(addr), get<1>(addr), get<2>(addr));
                 bitmap[idx] = 0;
             }
             allocated.clear();
         } else {
-            cout << "成功分配 " << num_blocks << " 个磁盘块：" << endl;
+            cout << "Successfully allocated " << num_blocks << " disk blocks:" << endl;
             for (auto& addr : allocated) {
-                cout << "  -> 柱面: " << get<0>(addr)
-                     << ", 磁头: " << get<1>(addr)
-                     << ", 扇区: " << get<2>(addr) << endl;
+                cout << "  -> Cylinder: " << get<0>(addr)
+                     << ", Head: " << get<1>(addr)
+                     << ", Sector: " << get<2>(addr) << endl;
             }
         }
 
@@ -78,17 +78,17 @@ public:
 
     // 释放指定的磁盘块列表
     void release(const vector<tuple<int, int, int>>& blocks) {
-        cout << "开始回收磁盘块..." << endl;
+        cout << "Releasing disk blocks..." << endl;
         for (const auto& addr : blocks) {
             int idx = addressToIndex(get<0>(addr), get<1>(addr), get<2>(addr));
             // 校验索引合法且当前块被占用才清除
             if (idx >= 0 && idx < total_blocks && bitmap[idx] == 1) {
                 bitmap[idx] = 0;
-                cout << "  -> 回收: 柱面=" << get<0>(addr)
-                     << ", 磁头=" << get<1>(addr)
-                     << ", 扇区=" << get<2>(addr) << endl;
+                cout << "  -> Released: Cylinder=" << get<0>(addr)
+                     << ", Head=" << get<1>(addr)
+                     << ", Sector=" << get<2>(addr) << endl;
             } else {
-                cout << "  无效或未分配的块: ("
+                cout << "  Invalid or already free block: ("
                      << get<0>(addr) << ", " << get<1>(addr) << ", " << get<2>(addr) << ")" << endl;
             }
         }
@@ -99,7 +99,7 @@ int main() {
     DiskBitmapManager disk;
 
     // === 示例流程 ===
-    cout << "=== 磁盘块分配示例 ===" << endl;
+    cout << "=== Disk Block Allocation Example ===" << endl;
     // 申请5个磁盘块
     auto allocated_blocks = disk.allocate(5);
     disk.printBitmap();
@@ -116,7 +116,7 @@ int main() {
     disk.printBitmap();
 
     // 结束示例
-    cout << "=== 示例结束 ===" << endl;
+    cout << "=== Example Finished ===" << endl;
 
     return 0;
 }
