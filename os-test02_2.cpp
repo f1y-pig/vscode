@@ -5,7 +5,7 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
-
+//
 const int BUFFER_SIZE = 8;
 
 struct DataItem {
